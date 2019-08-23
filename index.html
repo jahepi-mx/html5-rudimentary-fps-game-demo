@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>FPS camera demo</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="vector.js"></script>
+        <script type="text/javascript" src="polygon.js"></script>
+        <script type="text/javascript" src="cube.js"></script>
+        <script type="text/javascript" src="ground.js"></script>
+        <script type="text/javascript" src="tree.js"></script>
+        <script type="text/javascript" src="transformations.js"></script>
+        <script type="text/javascript" src="camera.js"></script>
+        <script type="text/javascript">
+            var width = 50;
+            var height = 50;
+            var halfWidth = width * 0.5;
+            var halfHeight = height * 0.5;
+            var prevTime = 0;
+            var toRadians = Math.PI / 180;
+            var toDegrees = 180 / Math.PI;
+            var yaw = 0;
+            var pitch = 0;
+            var canvas = null;
+            var context = null;
+            var lookUp = false;
+            var lookDown = false;
+            var left = false;
+            var shoot = false;
+            var right = false;
+            var lastX = 0;
+            var lastY = 0;
+            var firstTimeMouse = true;
+            var shootTime = 0;
+            var shootTimeLimit = 1;
+            var ground = new Ground(66, 105, 47);
+            var cubes = [new Cube(1, new Vector(0, 0, 14), 100, 103, 103), new Cube(2, new Vector(-3, 5, 20), 100, 103, 103)];
+            var trees = [new Tree(0.5, new Vector(-4, 0, 30)), new Tree(1, new Vector(20, 0, 10))];
+            var camera = Camera.getInstance();
+
+            window.onload = function () {
+                canvas = document.getElementById("canvas");
+                context = canvas.getContext("2d");
+                canvas.width = width;
+                canvas.height = height;
+                document.body.style = "background-color: black";
+                canvas.style = "cursor: none; border: 1px solid #111";
+                canvas.onmousedown = function (evt) {
+                    shoot = true;
+                };
+                canvas.onmouseup = function (evt) {
+                    shoot = false;
+                };
+                canvas.onmousemove = function (evt) {
+                    var rect = canvas.getBoundingClientRect();
+                    var xPos = evt.clientX - rect.left;
+                    var yPos = evt.clientY - rect.top;
+                    // https://learnopengl.com/Getting-started/Camera
+                    if (firstTimeMouse) {
+                        lastX = xPos;
+                        lastY = yPos;
+                        firstTimeMouse = false;
+                    }
+
+                    var xoffset = lastX - xPos;
+                    var yoffset = lastY - yPos;
+                    var sensitivity = 1.2;
+                    xoffset *= sensitivity;
+                    yoffset *= sensitivity;
+                    yaw += xoffset;
+                    pitch += yoffset;
+                    if (pitch > 60)
+                        pitch = 60;
+                    if (pitch < -60)
+                        pitch = -60;
+                    lastX = xPos;
+                    lastY = yPos;
+                    camera.update(yaw, pitch);
+                };
+                requestAnimationFrame(update);
+            };
+
+            function update(time) {
+                var dt = (time - prevTime) / 1000;
+                prevTime = time;
+
+                context.clearRect(0, 0, width, height);
+                shootTime += dt;
+
+                // Ground
+                ground.setVertexs(camera);
+                ground.update(dt);
+                ground.render(context);
+
+                if (shootTime >= shootTimeLimit && shoot) {
+                    var bullet = new Cube(0.5, new Vector(camera.position.x, camera.position.y, camera.position.z), 255, 247, 0);
+                    bullet.dir.x = camera.direction.x;
+                    bullet.dir.y = camera.direction.y;
+                    bullet.dir.z = camera.direction.z;
+                    bullet.dir.mulThisByScalar(30);
+                    bullet.setYawRotation(true);
+                    cubes.push(bullet);
+                    shootTime = 0;
+                }
+
+                var polygons = [];
+                for (var a = 0; a < cubes.length; a++) {
+                    cubes[a].update(dt);
+                    polygons = polygons.concat(cubes[a].polygons);
+                    if (cubes[a].dispose) {
+                        cubes.splice(a--, 1);
+                    }
+                }
+                for (let tree of trees) {
+                    tree.update(dt);
+                    for (let cube of tree.cubes) {
+                        polygons = polygons.concat(cube.polygons);
+                    }
+                }
+                polygons.sort(function (p1, p2) {
+                    var z1 = p1.getAverageZ();
+                    var z2 = p2.getAverageZ();
+                    return z1 > z2 ? -1 : z1 < z2 ? 1 : 0;
+                });
+                for (let polygon of polygons) {
+                    polygon.render(context);
+                }
+                if (lookUp) {
+                    var translate = new Vector(camera.direction.x, 0, camera.direction.z).normalizeThis().mulThisByScalar(10).mulThisByScalar(dt);
+                    camera.position.addThis(translate);
+                }
+
+                if (lookDown) {
+                    var translate = new Vector(camera.direction.x, 0, camera.direction.z).mulThisByScalar(-1).normalizeThis().mulThisByScalar(10).mulThisByScalar(dt);
+                    camera.position.addThis(translate);
+                }
+
+                if (left) {
+                    var up = new Vector(0, 1, 0);
+                    var z = camera.direction;
+                    var x = up.cross(z);
+                    var translate = new Vector(x.x, 0, x.z).mulThisByScalar(-1).normalizeThis().mulThisByScalar(10).mulThisByScalar(dt);
+                    camera.position.addThis(translate);
+                }
+
+                if (right) {
+                    var up = new Vector(0, 1, 0);
+                    var z = camera.direction;
+                    var x = up.cross(z);
+                    var translate = new Vector(x.x, 0, x.z).normalizeThis().mulThisByScalar(10).mulThisByScalar(dt);
+                    camera.position.addThis(translate);
+                }
+
+                requestAnimationFrame(update);
+            }
+
+            document.onkeydown = function (evt) {
+                if (evt.keyCode === 87)
+                    lookUp = true;
+                if (evt.keyCode === 83)
+                    lookDown = true;
+                if (evt.keyCode === 65)
+                    left = true;
+                if (evt.keyCode === 68)
+                    right = true;
+            };
+
+            document.onkeyup = function (evt) {
+                if (evt.keyCode === 87)
+                    lookUp = false;
+                if (evt.keyCode === 83)
+                    lookDown = false;
+                if (evt.keyCode === 65)
+                    left = false;
+                if (evt.keyCode === 68)
+                    right = false;
+            };
+        </script>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+    </body>
+</html>
