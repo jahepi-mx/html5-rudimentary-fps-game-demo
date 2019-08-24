@@ -35,8 +35,6 @@ and open the template in the editor.
             var prevTime = 0;
             var toRadians = Math.PI / 180;
             var toDegrees = 180 / Math.PI;
-            var yaw = 0;
-            var pitch = 0;
             var canvas = null;
             var context = null;
             var lookUp = false;
@@ -50,10 +48,12 @@ and open the template in the editor.
             var shootTime = 0;
             var shootTimeLimit = 1;
             var ground = new Ground(66, 105, 47);
-            var cubes = [new Cube(1, new Vector(0, 1, 14), 100, 103, 103), new Cube(2, new Vector(-3, 2, 20), 100, 103, 103)];
-            var trees = [new Tree(2, new Vector(-4, 2, 30)), new Tree(1, new Vector(20, 1, 10))];
+            var cubes = [new Cube(1, new Vector(0, 1, 14), 100, 103, 103), new Cube(2, new Vector(-3, 2, 20), 100, 103, 103), new Cube(0.8, new Vector(15, 0.8, -20), 100, 103, 103), new Cube(1.5, new Vector(-25, 1.5, 40), 100, 103, 103), new Cube(1.7, new Vector(-35, 1.7, -50), 100, 103, 103)];
+            var trees = [new Tree(2, new Vector(-4, 2, 30)), new Tree(1, new Vector(20, 1, 10)), new Tree(1.5, new Vector(4, 1.5, -23)), new Tree(0.8, new Vector(-20, 0.8, -40))];
             var camera = Camera.getInstance();
             var skyBg = null;
+            var yaw = camera.yaw;
+            var pitch = 0;
 
             window.onload = function () {
                 canvas = document.getElementById("canvas");
