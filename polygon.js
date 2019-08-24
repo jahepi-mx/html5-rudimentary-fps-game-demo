@@ -66,14 +66,14 @@ class Polygon {
         v4.addThis(centerVector);
         normal.addThis(centerVector);
         // Render
-        context.strokeStyle = "#111";
+        //context.strokeStyle = "#111";
         context.beginPath();
         context.moveTo(v1.x, v1.y);
         context.lineTo(v2.x, v2.y);
         context.lineTo(v3.x, v3.y);
         context.lineTo(v4.x, v4.y);
         context.lineTo(v1.x, v1.y);
-        context.stroke();
+        //context.stroke();
         context.fill();
         // Render normal
         /*

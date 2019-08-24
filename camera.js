@@ -12,7 +12,7 @@ class Camera {
     constructor() {
         this.yaw = 90;
         this.pitch = 0;
-        this.position = new Vector(0, 0, 0);
+        this.position = new Vector(0, 1, 0);
         this.direction = new Vector(Math.cos(this.yaw * toRadians), 0, Math.sin(this.yaw * toRadians));
     }
     

@@ -58,8 +58,8 @@ class Transformations {
     getCameraSpace(vector, camera) {
         var up = new Vector(0, 1, 0);
         var z = camera.direction;
-        var x = up.cross(z);
-        var y = z.cross(x);
+        var x = up.cross(z).normalizeThis();
+        var y = z.cross(x).normalizeThis();
         // Invert
         var ix = new Vector(x.x, y.x, z.x).mulByScalar(vector.x);
         var iy = new Vector(x.y, y.y, z.y).mulByScalar(vector.y);

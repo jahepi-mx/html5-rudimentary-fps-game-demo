@@ -68,7 +68,7 @@ class Cube {
             polygon.update(dt);
         }
 
-        if (this.traveled.dot(this.traveled) >= 20 * 20) {
+        if (this.traveled.dot(this.traveled) >= 60 * 60) {
             this.dispose = true;
         }
     }

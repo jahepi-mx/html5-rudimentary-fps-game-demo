@@ -11,10 +11,10 @@ class Ground extends Polygon {
         zGround.y = 0;
         xGround.normalizeThis();
         zGround.normalizeThis();
-        this.vertex4 = xGround.mulByScalar(20).add(yGround.mulByScalar(-4)).add(zGround);
-        this.vertex1 = xGround.mulByScalar(-20).add(yGround.mulByScalar(-4)).add(zGround);
-        this.vertex2 = xGround.mulByScalar(-20).add(zGround.mulByScalar(5));
-        this.vertex3 = xGround.mulByScalar(20).add(zGround.mulByScalar(5));
+        this.vertex3 = xGround.mulByScalar(20).add(yGround.mulByScalar(-4)).add(zGround);
+        this.vertex2 = xGround.mulByScalar(-20).add(yGround.mulByScalar(-4)).add(zGround);
+        this.vertex1 = xGround.mulByScalar(-20).add(zGround.mulByScalar(5));
+        this.vertex4 = xGround.mulByScalar(20).add(zGround.mulByScalar(5));
         this.translate.x = camera.position.x;
         this.translate.y = camera.position.y;
         this.translate.z = camera.position.z;
@@ -36,14 +36,14 @@ class Ground extends Polygon {
         v3.addThis(centerVector);
         v4.addThis(centerVector);
         // Render
-        context.strokeStyle = "#111";
+        //context.strokeStyle = "#111";
         context.beginPath();
         context.moveTo(v1.x, v1.y);
         context.lineTo(v2.x, v2.y);
         context.lineTo(v3.x, v3.y);
         context.lineTo(v4.x, v4.y);
         context.lineTo(v1.x, v1.y);
-        context.stroke();
+        //context.stroke();
         context.fill();
     }
 }

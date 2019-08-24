@@ -10,6 +10,11 @@ class Tree {
             new Cube(this.size, new Vector(0, this.size * 4, this.size * 2), 0, 160, 0),
             new Cube(this.size, new Vector(-this.size * 2, this.size * 4, 0), 0, 160, 0),
             new Cube(this.size, new Vector(this.size * 2, this.size * 4, 0), 0, 160, 0),
+            
+            new Cube(this.size, new Vector(0, this.size * 6, -this.size * 2), 0, 160, 0),
+            new Cube(this.size, new Vector(0, this.size * 6, this.size * 2), 0, 160, 0),
+            new Cube(this.size, new Vector(-this.size * 2, this.size * 6, 0), 0, 160, 0),
+            new Cube(this.size, new Vector(this.size * 2, this.size * 6, 0), 0, 160, 0),
 
             new Cube(this.size, new Vector(this.size * 2, this.size * 6, this.size * 2), 0, 160, 0),
             new Cube(this.size, new Vector(this.size * 2, this.size * 6, -this.size * 2), 0, 160, 0),
