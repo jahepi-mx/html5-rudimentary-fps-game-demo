@@ -106,7 +106,12 @@ and open the template in the editor.
                 context.clearRect(0, 0, width, height);
                 shootTime += dt;
                 
-                context.drawImage(skyBg, 0, 0, width, height);
+                var grd = context.createLinearGradient(0, 0, 0, height * 0.5);
+                grd.addColorStop(1, "yellow");
+                grd.addColorStop(0, "black");
+                // Fill with gradient
+                context.fillStyle = grd;
+                context.fillRect(0, 0, width, height);
                 
                 // Ground
                 ground.setVertexs(camera);
@@ -207,7 +212,6 @@ and open the template in the editor.
     </head>
     <body>
         <canvas id="canvas"></canvas>
-        <img id="sky" src="assets/sky.jpg" width="800" height="600" alt="sky" style="display: none"/>
         <img id="gun" src="assets/gun.png" width="207" height="177" alt="sky" style="display: none"/>
     </body>
 </html>

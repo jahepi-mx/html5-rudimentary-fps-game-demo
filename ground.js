@@ -24,7 +24,11 @@ class Ground extends Polygon {
         var v2 = this.transformations.transform3dto2d(this.wVertex2, width, height);
         var v3 = this.transformations.transform3dto2d(this.wVertex3, width, height);
         var v4 = this.transformations.transform3dto2d(this.wVertex4, width, height);
-        context.fillStyle = "rgb(" + this.r + ", " + this.g + ", " + this.b + ")";
+        var grd = context.createLinearGradient(0, 0, 0, height);
+        grd.addColorStop(1, "rgb(" + this.r + ", " + this.g + ", " + this.b + ")");
+        grd.addColorStop(0, "black");
+        // Fill with gradient
+        context.fillStyle = grd;
         // Center Canvas
         v1.y *= -1;
         v2.y *= -1;
