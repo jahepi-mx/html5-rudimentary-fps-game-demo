@@ -88,10 +88,10 @@ and open the template in the editor.
                     yoffset *= sensitivity;
                     yaw += xoffset;
                     pitch += yoffset;
-                    if (pitch > 60)
-                        pitch = 60;
-                    if (pitch < -60)
-                        pitch = -60;
+                    if (pitch > 89)
+                        pitch = 89;
+                    if (pitch < -70)
+                        pitch = -70;
                     lastX = xPos;
                     lastY = yPos;
                     camera.update(yaw, pitch);
