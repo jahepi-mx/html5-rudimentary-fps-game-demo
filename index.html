@@ -37,8 +37,8 @@ and open the template in the editor.
             var toDegrees = 180 / Math.PI;
             var canvas = null;
             var context = null;
-            var lookUp = false;
-            var lookDown = false;
+            var forward = false;
+            var backward = false;
             var left = false;
             var shoot = false;
             var right = false;
@@ -51,14 +51,12 @@ and open the template in the editor.
             var cubes = [new Cube(1, new Vector(0, 1, 14), 100, 103, 103), new Cube(2, new Vector(-3, 2, 20), 100, 103, 103), new Cube(0.8, new Vector(15, 0.8, -20), 100, 103, 103), new Cube(1.5, new Vector(-25, 1.5, 40), 100, 103, 103), new Cube(1.7, new Vector(-35, 1.7, -50), 100, 103, 103)];
             var trees = [new Tree(2, new Vector(-4, 2, 30)), new Tree(1, new Vector(20, 1, 10)), new Tree(1.5, new Vector(4, 1.5, -23)), new Tree(0.8, new Vector(-20, 0.8, -40))];
             var camera = Camera.getInstance();
-            var skyBg = null;
             var yaw = camera.yaw;
             var pitch = 0;
 
             window.onload = function () {
                 canvas = document.getElementById("canvas");
                 context = canvas.getContext("2d");
-                skyBg = document.getElementById("sky");
                 gunImg = document.getElementById("gun");
                 canvas.width = width;
                 canvas.height = height;
@@ -151,12 +149,12 @@ and open the template in the editor.
                 for (let polygon of polygons) {
                     polygon.render(context);
                 }
-                if (lookUp) {
+                if (forward) {
                     var translate = new Vector(camera.direction.x, 0, camera.direction.z).normalizeThis().mulThisByScalar(10).mulThisByScalar(dt);
                     camera.position.addThis(translate);
                 }
 
-                if (lookDown) {
+                if (backward) {
                     var translate = new Vector(camera.direction.x, 0, camera.direction.z).mulThisByScalar(-1).normalizeThis().mulThisByScalar(10).mulThisByScalar(dt);
                     camera.position.addThis(translate);
                 }
@@ -189,9 +187,9 @@ and open the template in the editor.
 
             document.onkeydown = function (evt) {
                 if (evt.keyCode === 87)
-                    lookUp = true;
+                    forward = true;
                 if (evt.keyCode === 83)
-                    lookDown = true;
+                    backward = true;
                 if (evt.keyCode === 65)
                     left = true;
                 if (evt.keyCode === 68)
@@ -200,9 +198,9 @@ and open the template in the editor.
 
             document.onkeyup = function (evt) {
                 if (evt.keyCode === 87)
-                    lookUp = false;
+                    forward = false;
                 if (evt.keyCode === 83)
-                    lookDown = false;
+                    backward = false;
                 if (evt.keyCode === 65)
                     left = false;
                 if (evt.keyCode === 68)
