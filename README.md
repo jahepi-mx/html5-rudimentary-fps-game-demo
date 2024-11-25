@@ -1,6 +1,6 @@
 ## Rudimentary FPS in JavaScript
 
-This demo is meant to show how to implement an FPS camera and control scheme for a 3D game.
+This demo is meant to show how to implement an FPS camera and control scheme for a 3D game in JavaScript.
 
 ## Control Scheme
 
